@@ -1,7 +1,35 @@
-﻿function Connection() {
+﻿Connection = function (config) {
+  init();
 
-  function sendRequest(url, callback, postData) {
-    var xhr = new Factory().create();
+  this.init = function () {
+    this.request = new Request(config);
+    this.response = new Response(config);
+    this.xhr = new ConnectionFactory().create();
+
+    Utils.override(this, config);
+  };
+
+  this.open = function () {
+    if (!xhr) throw 'failed to create the XMLHttpRequest object.';
+    if (!request.isValid()) throw 'the request is not valid.';
+
+    openAndSet();
+  };
+  this.openAndSet = function () {
+    if (async) {
+      xhr.onreadystatechange = stateChanged;
+    }
+    request.open(xhr);
+  };
+  this.stateChanged = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+
+    }
+  };
+
+  function send(url) {
+    var factory = new ConnectionFactory();
+    var xhr = factory.create();
     if (!xhr) return;
 
     var method = (postData) ? "POST" : "GET";
@@ -16,7 +44,8 @@
         return;
       }
       callback(xhr);
-    }
+    };
+
     if (xhr.readyState == 4) return;
     xhr.send(postData);
   }
