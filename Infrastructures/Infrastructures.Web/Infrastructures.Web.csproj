@@ -72,7 +72,6 @@
     <Content Include="js\connection\RequestMethod.js" />
     <Content Include="js\connection\Response.js" />
     <Content Include="js\connection\Connection.js" />
-    <Content Include="js\connection\Factory.js" />
     <Content Include="js\utils\Override.js" />
     <Content Include="js\utils\Utils.js" />
     <Content Include="js\utils\Apply.js" />

@@ -8,7 +8,9 @@
     this.username = '';
     this.password = '';
     this.params = '';
-    this.headers = {};
+    this.headers = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    }; // todo: should initialized with required headers
 
     if (typeof config === 'string') config = { url: config };
     Utils.override(this, config);
@@ -35,16 +37,5 @@
     if (this.username)
       return !!this.password;
     return true;
-  };
-
-  this.open = function (xhr) {
-    for (var i in headers) {
-      xhr.setRequestHeader(i, headers[i]);
-    }
-
-    if (username)
-      xhr.open(method, url, async, username, password);
-    else
-      xhr.open(method, url, async);
   };
 }

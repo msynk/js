@@ -1,52 +1,76 @@
 ﻿Connection = function (config) {
   init();
 
-  this.init = function () {
-    this.request = new Request(config);
-    this.response = new Response(config);
-    this.xhr = new ConnectionFactory().create();
-
-    Utils.override(this, config);
-  };
-
   this.open = function () {
     if (!xhr) throw 'failed to create the XMLHttpRequest object.';
     if (!request.isValid()) throw 'the request is not valid.';
 
     openAndSet();
   };
+
+  this.send = function (data) {
+    data = data || request.params || null;
+    xhr.send(data);
+    if (request.async) {
+      this.response = new Response(xhr);
+    }
+  };
+
+  this.init = function () {
+    this.request = new Request(config);
+    this.response = null;
+    this.xhr = new createXhr();
+    this.success = null;
+    this.failure = null;
+    this.complete = null;
+
+    Utils.override(this, config);
+  };
+
+  function createXhr() {
+    var xmlhttp = false, xhrs = [
+      function () { return new XMLHttpRequest(); },
+      function () { return new ActiveXObject("Msxml2.XMLHTTP"); },
+      function () { return new ActiveXObject("Msxml3.XMLHTTP"); },
+      function () { return new ActiveXObject("Microsoft.XMLHTTP"); }
+    ];
+    for (var i = 0; i < xhrs.length; i++) {
+      try {
+        xmlhttp = xhrs[i]();
+      }
+      catch (e) {
+        continue;
+      }
+      break;
+    }
+    return xmlhttp;
+  }
   this.openAndSet = function () {
     if (async) {
       xhr.onreadystatechange = stateChanged;
     }
-    request.open(xhr);
-  };
-  this.stateChanged = function () {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-
+    var headers = request.headers;
+    for (var i in headers) {
+      xhr.setRequestHeader(i, headers[i]);
+    }
+    if (request.username) {
+      xhr.open(request.method, request.url, request.async, request.username, request.password);
+    } else {
+      xhr.open(request.method, request.url, request.async);
     }
   };
-
-  function send(url) {
-    var factory = new ConnectionFactory();
-    var xhr = factory.create();
-    if (!xhr) return;
-
-    var method = (postData) ? "POST" : "GET";
-    xhr.open(method, url, true);
-    xhr.setRequestHeader('User-Agent', 'XMLHTTP/1.0');
-    if (postData)
-      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState != 4) return;
-      if (xhr.status != 200 && xhr.status != 304) {
-        //			alert('HTTP error ' + req.status);
-        return;
-      }
-      callback(xhr);
-    };
-
-    if (xhr.readyState == 4) return;
-    xhr.send(postData);
-  }
+  this.stateChanged = function () {
+    if (xhr.readyState == 4) {
+      done();
+    }
+  };
+  this.done = function() {
+    this.response = new Response(xhr);
+    complete(response);
+    if (response.isSuccess()) {
+      success(response);
+    } else {
+      failure(response);
+    }
+  };
 }
