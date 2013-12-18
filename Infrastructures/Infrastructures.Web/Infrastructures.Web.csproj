@@ -73,6 +73,7 @@
     <Content Include="js\connection\Connection.js" />
     <Content Include="js\utils\Extend.js" />
     <Content Include="js\utils\Override.js" />
+    <Content Include="js\utils\Ready.js" />
     <Content Include="js\utils\Utils.js" />
     <Content Include="js\utils\Apply.js" />
     <Content Include="Web.config" />
