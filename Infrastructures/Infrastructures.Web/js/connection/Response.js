@@ -1,17 +1,10 @@
 ﻿Response = function (xhr) {
-  init();
-
-
-  this.init = function () {
-    this.state = xhr.readyState;
-    this.status = null;
-    this.responseText = xhr.responseText || null;
-
-    getStatus();
-  };
-
+  if (!(this instanceof Response)) {
+    throw 'its a constructor not a function.';
+  }
+  
   this.isSuccess = function () {
-    return !status || (status >= 200 && status < 300) || status == 304;
+    return !this.status || (this.status >= 200 && this.status < 300) || this.status == 304;
   };
   this.getStatus = function () {
     try {
@@ -25,4 +18,12 @@
       this.status = 0;
     }
   };
+  
+  (function response$Init(me) {
+    me.state = xhr.readyState;
+    me.status = null;
+    me.responseText = xhr.responseText || null;
+
+    me.getStatus();
+  })(this);
 }

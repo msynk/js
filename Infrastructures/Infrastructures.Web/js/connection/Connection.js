@@ -1,53 +1,16 @@
 ﻿Connection = function (config) {
-  init();
+  if (!(this instanceof Connection)) {
+    throw 'its a constructor not a function.';
+  }
 
   this.open = function () {
+    var xhr = this.xhr,
+      request = this.request;
     if (!xhr) throw 'failed to create the XMLHttpRequest object.';
     if (!request.isValid()) throw 'the request is not valid.';
 
-    openAndSet();
-  };
-
-  this.send = function (data) {
-    data = data || request.params || null;
-    xhr.send(data);
-    if (request.async) {
-      this.response = new Response(xhr);
-    }
-  };
-
-  this.init = function () {
-    this.request = new Request(config);
-    this.response = null;
-    this.xhr = new createXhr();
-    this.success = null;
-    this.failure = null;
-    this.complete = null;
-
-    Utils.override(this, config);
-  };
-
-  function createXhr() {
-    var xmlhttp = false, xhrs = [
-      function () { return new XMLHttpRequest(); },
-      function () { return new ActiveXObject("Msxml2.XMLHTTP"); },
-      function () { return new ActiveXObject("Msxml3.XMLHTTP"); },
-      function () { return new ActiveXObject("Microsoft.XMLHTTP"); }
-    ];
-    for (var i = 0; i < xhrs.length; i++) {
-      try {
-        xmlhttp = xhrs[i]();
-      }
-      catch (e) {
-        continue;
-      }
-      break;
-    }
-    return xmlhttp;
-  }
-  this.openAndSet = function () {
     if (async) {
-      xhr.onreadystatechange = stateChanged;
+      xhr.onreadystatechange = this.stateChanged;
     }
     var headers = request.headers;
     for (var i in headers) {
@@ -59,18 +22,58 @@
       xhr.open(request.method, request.url, request.async);
     }
   };
+  this.send = function (data) {
+    var xhr = this.xhr,
+      request = this.request;
+    data = data || request.params || null;
+    xhr.send(data);
+    if (request.async) {
+      this.response = new Response(xhr);
+    }
+  };
+
   this.stateChanged = function () {
-    if (xhr.readyState == 4) {
-      done();
+    if (this.xhr.readyState == 4) {
+      this.done();
     }
   };
-  this.done = function() {
+  this.done = function () {
     this.response = new Response(xhr);
-    complete(response);
-    if (response.isSuccess()) {
-      success(response);
+    this.complete(this.response);
+    if (this.response.isSuccess()) {
+      this.success(this.response);
     } else {
-      failure(response);
+      this.failure(this.response);
     }
   };
+
+  (function connection$Init(me) {
+    me.request = new Request(config);
+    me.xhr = createXhr();
+    me.response = null;
+    me.success = null;
+    me.failure = null;
+    me.complete = null;
+
+    me.override(config);
+  })(this);
+
+  function createXhr() {
+    var xhr,
+      xhrs = [
+        function () { return new XMLHttpRequest(); },
+        function () { return new ActiveXObject("Msxml2.XMLHTTP"); },
+        function () { return new ActiveXObject("Msxml3.XMLHTTP"); },
+        function () { return new ActiveXObject("Microsoft.XMLHTTP"); }
+      ];
+    for (var i = 0; i < xhrs.length; i++) {
+      try {
+        xhr = xhrs[i]();
+      } catch (e) {
+        continue;
+      }
+      break;
+    }
+    return xhr;
+  }
 }

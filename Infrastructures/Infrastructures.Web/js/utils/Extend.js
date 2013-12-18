@@ -1,4 +1,4 @@
-﻿Override = function (object, config) {
+﻿Extend = function (object, config) {
   if (arguments.length === 1) {
     config = object;
     object = this;
@@ -7,10 +7,9 @@
     return object;
   }
 
-  for (var property in object) {
-    if (config.hasOwnProperty(property)) {
-      object[property] = config[property];
-    }
+  for (var property in config) {
+    //if (config.hasOwnProperty(property))
+    object[property] = config[property];
   }
   return object;
 };
