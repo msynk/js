@@ -68,9 +68,10 @@
     <Content Include="index.html" />
     <Content Include="js\app.js" />
     <Content Include="js\application\Application.js" />
-    <Content Include="js\connection\Request.js" />
-    <Content Include="js\connection\Response.js" />
-    <Content Include="js\connection\Connection.js" />
+    <Content Include="js\connections\xhr\Xhr.js" />
+    <Content Include="js\connections\xhr\XhrRequest.js" />
+    <Content Include="js\connections\xhr\XhrResponse.js" />
+    <Content Include="js\helpers\Http.js" />
     <Content Include="js\utils\Extend.js" />
     <Content Include="js\utils\Override.js" />
     <Content Include="js\utils\Ready.js" />

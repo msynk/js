@@ -3,67 +3,24 @@
 <head>
   <title>Infrastructures</title>
   <script type="text/javascript">
-    utils = {
-      init: function () {
-        Object.prototype.override = utils.override;
-      },
-      override: function (object, config) {
-        if (arguments.length === 1) {
-          config = object;
-          object = this;
+    data = {
+      a: null,
+      b: function () {
+        if (!this.a) {
+          this.a = 'A:' + new Date().getMilliseconds();
         }
-        if (!object || !config || typeof config !== 'object') {
-          return object;
-        }
-
-        for (var property in object) {
-          if (config.hasOwnProperty(property)) {
-            object[property] = config[property];
-          }
-        }
-        return object;
       },
     };
 
-    utils.init();
-
-
-    Test = function (config) {
-      if (!(this instanceof Test)) {
-        throw 'its a constructor not a function.';
-      }
-
-      (function test$Init(me) {
-        console.log('initializing with ' + config);
-        me.name = 'Test';
-        console.log('initialized: ');
-      })(this);
-
-      this.say = function () {
-        console.log(this.name);
-      };
-      this.config = function() {
-        console.log(config);
-      };
-    };
-
-    try {
-      var t1 = Test();
-    } catch (e) {
-      console.log('XXX: ' + e);
-    }
-
-    try {
-      var t2 = new Test('configgggggggggggg');
-      t2.override({ name: 'mammad' });
-      console.log(t2);
-      t2.say();
-      t2.config();
-      config = 'changed';
-      t2.config();
-    } catch (e) {
-      console.log('XXX: ' + e);
-    }
+    console.log(data.a);
+    data.b();
+    console.log(data.a);
+    data.b();
+    console.log(data.a);
+    console.log(data.a);
+    console.log(data.a);
+    data.b();
+    console.log(data.a);
   </script>
 </head>
 <body>

@@ -1,9 +1,7 @@
 ﻿Utils = {
-  init: function () {
-    Object.prototype.override = Utils.override;
-    Object.prototype.apply = Utils.apply;
-    Object.prototype.extend = Utils.extend;
-  },
+  EmptyFn: function () { },
+  log: function (log) { console.log(log); },
+  error: function(err) { throw err; },
   apply: Apply,
   override: Override,
   extend: Extend,

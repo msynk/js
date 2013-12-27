@@ -1,4 +1,3 @@
 ﻿(function (window, undefined) {
-  var $ = {};
-  Utils.init();
+  var $ = new Application('myApp');
 })(window);
