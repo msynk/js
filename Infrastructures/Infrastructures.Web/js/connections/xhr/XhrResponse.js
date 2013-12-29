@@ -6,7 +6,18 @@
   this.isSuccess = function () {
     return !this.status || (this.status >= 200 && this.status < 300) || this.status == 304;
   };
-  this.getStatus = function () {
+  
+  ////////////////////////////////////////////////////////
+  (function response$Init(me) {
+    me.xhr = xhr;
+    me.state = xhr.readyState;
+    me.status = null;
+    me.responseText = xhr.responseText || null;
+
+    me.xhrResponse$GetStatus();
+  })(this);
+
+  this.xhrResponse$GetStatus = function () {
     try {
       // IE sometimes returns 1223 for a 204 response.
       if (xhr.status === 1223) {
@@ -18,13 +29,4 @@
       this.status = 0;
     }
   };
-  
-  (function response$Init(me) {
-    me.xhr = xhr;
-    me.state = xhr.readyState;
-    me.status = null;
-    me.responseText = xhr.responseText || null;
-
-    me.getStatus();
-  })(this);
 }

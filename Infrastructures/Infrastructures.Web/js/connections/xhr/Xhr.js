@@ -23,7 +23,7 @@
     r.validate();
 
     if (r.async) {
-      x.onreadystatechange = this.stateChanged;
+      x.onreadystatechange = this.xhr$StateChanged;
     }
     var headers = r.headers;
     for (var i in headers) {
@@ -48,33 +48,15 @@
     }
   };
 
-  this.stateChanged = function () {
-    if (this.xhr.readyState == 4) {
-      this.done();
-    }
-  };
-  this.done = function () {
-    this.response = new XhrResponse(xhr);
-
-    if (this.complete) {
-      this.complete(this.response);
-    }
-
-    if (this.response.isSuccess() && this.success) {
-      this.success(this.response);
-    } else if (this.failure) {
-      this.failure(this.response);
-    }
-  };
-
-  (function connection$Init(me) {
-    me.xhr = connection$CreateXhr();
+  ////////////////////////////////////////////////////////
+  (function xhr$Init(me) {
+    me.xhr = xhr$CreateXhr();
     if (!me.xhr) throw 'Xhr: failed to create the XMLHttpRequest object.';
 
     me.reset(config);
   })(this);
 
-  function connection$CreateXhr() {
+  function xhr$CreateXhr() {
     var xhr = null,
       xhrs = [
         function () { return new XMLHttpRequest(); },
@@ -92,4 +74,24 @@
     }
     return xhr;
   }
+
+  this.xhr$StateChanged = function () {
+    if (this.xhr.readyState == 4) {
+      this.xhr$Done();
+    }
+  };
+
+  this.xhr$Done = function () {
+    this.response = new XhrResponse(xhr);
+
+    if (this.complete) {
+      this.complete(this.response);
+    }
+
+    if (this.response.isSuccess() && this.success) {
+      this.success(this.response);
+    } else if (this.failure) {
+      this.failure(this.response);
+    }
+  };
 }

@@ -9,32 +9,16 @@
 
   this.validate = function () {
     var exception = '';
-    if (!this.validateUrl()) exception += 'XhrRequest: invalid url.';
-    if (!this.validateMethod()) exception += 'XhrRequest: invalid method.';
-    if (!this.validateUser()) exception += 'XhrRequest: invalid user.';
+    if (!this.xhrRequest$ValidateUrl()) exception += 'XhrRequest: invalid url.';
+    if (!this.xhrRequest$ValidateMethod()) exception += 'XhrRequest: invalid method.';
+    if (!this.xhrRequest$ValidateUser()) exception += 'XhrRequest: invalid user.';
 
     if (exception) throw exception;
 
     return true;
   };
-  this.validateUrl = function () {
-    return !!this.url || typeof this.url === 'string';
-  };
-  this.validateMethod = function () {
-    if (!this.method) return false;
-    var methods = XhrRequest.Methods;
-    for (var m in methods) {
-      if (methods.hasOwnProperty(m) && this.method === methods[m])
-        return true;
-    }
-    return false;
-  };
-  this.validateUser = function () {
-    if (this.username)
-      return !!this.password;
-    return true;
-  };
 
+  ////////////////////////////////////////////////////////
   (function request$Init(me) {
     me.url = '';
     me.method = XhrRequest.Methods.get;
@@ -49,6 +33,24 @@
     if (typeof config === 'string') config = { url: config };
     me.override(config);
   })(this);
+
+  this.xhrRequest$ValidateUrl = function () {
+    return !!this.url || typeof this.url === 'string';
+  };
+  this.xhrRequest$ValidateMethod = function () {
+    if (!this.method) return false;
+    var methods = XhrRequest.Methods;
+    for (var m in methods) {
+      if (methods.hasOwnProperty(m) && this.method === methods[m])
+        return true;
+    }
+    return false;
+  };
+  this.xhrRequest$ValidateUser = function () {
+    if (this.username)
+      return !!this.password;
+    return true;
+  };
 };
 XhrRequest.Methods = {
   'get': 'GET',
