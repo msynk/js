@@ -9,9 +9,9 @@
 
   this.validate = function () {
     var exception = '';
-    if (!this.xhrRequest$ValidateUrl()) exception += 'XhrRequest: invalid url.';
-    if (!this.xhrRequest$ValidateMethod()) exception += 'XhrRequest: invalid method.';
-    if (!this.xhrRequest$ValidateUser()) exception += 'XhrRequest: invalid user.';
+    if (!this.$ValidateUrl()) exception += 'XhrRequest: invalid url.';
+    if (!this.$ValidateMethod()) exception += 'XhrRequest: invalid method.';
+    if (!this.$ValidateUser()) exception += 'XhrRequest: invalid user.';
 
     if (exception) throw exception;
 
@@ -19,7 +19,7 @@
   };
 
   ////////////////////////////////////////////////////////
-  (function request$Init(me) {
+  (function $Init(me) {
     me.url = '';
     me.method = XhrRequest.Methods.get;
     me.async = true;
@@ -34,10 +34,10 @@
     me.override(config);
   })(this);
 
-  this.xhrRequest$ValidateUrl = function () {
+  this.$ValidateUrl = function () {
     return !!this.url || typeof this.url === 'string';
   };
-  this.xhrRequest$ValidateMethod = function () {
+  this.$ValidateMethod = function () {
     if (!this.method) return false;
     var methods = XhrRequest.Methods;
     for (var m in methods) {
@@ -46,7 +46,7 @@
     }
     return false;
   };
-  this.xhrRequest$ValidateUser = function () {
+  this.$ValidateUser = function () {
     if (this.username)
       return !!this.password;
     return true;

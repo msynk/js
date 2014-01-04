@@ -7,24 +7,21 @@
     this.request = new XhrRequest(options);
     this.response = null;
 
-    this.success = Utils.log('Xhr(' + this.request.url + '): Success.');
-    this.failure = Utils.error('Xhr(' + this.request.url + '): Failue.');
-    this.complete = Utils.EmptyFn;
+    this.success = function (response) { Utils.log('Xhr(' + response.xhr.request.url + '): Success.'); };
+    this.failure = function (response) { Utils.error('Xhr(' + response.xhr.request.url + '): Failue.'); };
+    this.done = Utils.EmptyFn;
 
     this.override(options);
   },
 
   this.open = function () {
-    var x = this.xhr,
+    var x = this.x,
       r = this.request;
 
     if (!x) throw 'Xhr: no xhr.';
     if (!r) throw 'Xhr: no request.';
     r.validate();
 
-    if (r.async) {
-      x.onreadystatechange = this.xhr$StateChanged;
-    }
     var headers = r.headers;
     for (var i in headers) {
       x.setRequestHeader(i, headers[i]);
@@ -34,29 +31,27 @@
     } else {
       x.open(r.method, r.url, r.async);
     }
+    return this;
   };
   this.send = function (options) {
     if (options) this.reset(options);
-    var x = this.xhr,
+    var x = this.x,
       r = this.request;
-
+    this.response = new XhrResponse(this);
     this.open();
     x.send(r.params);
-    if (!r.async) {
-      this.response = new XhrResponse(x);
-      return this.response.responseText;
-    }
+    return this.response;
   };
 
   ////////////////////////////////////////////////////////
-  (function xhr$Init(me) {
-    me.xhr = xhr$CreateXhr();
-    if (!me.xhr) throw 'Xhr: failed to create the XMLHttpRequest object.';
+  (function $Init(me) {
+    me.x = $CreateXhr();
+    if (!me.x) throw 'Xhr: failed to create the XMLHttpRequest object.';
 
     me.reset(config);
   })(this);
 
-  function xhr$CreateXhr() {
+  function $CreateXhr() {
     var xhr = null,
       xhrs = [
         function () { return new XMLHttpRequest(); },
@@ -75,23 +70,5 @@
     return xhr;
   }
 
-  this.xhr$StateChanged = function () {
-    if (this.xhr.readyState == 4) {
-      this.xhr$Done();
-    }
-  };
 
-  this.xhr$Done = function () {
-    this.response = new XhrResponse(xhr);
-
-    if (this.complete) {
-      this.complete(this.response);
-    }
-
-    if (this.response.isSuccess() && this.success) {
-      this.success(this.response);
-    } else if (this.failure) {
-      this.failure(this.response);
-    }
-  };
 }
