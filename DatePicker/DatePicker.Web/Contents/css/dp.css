@@ -1,2 +1,14 @@
-﻿body {
+﻿.datepicker {
+  position: absolute;
+  border: solid 2px blue;
+}
+.datepicker-table {
+  
+}
+.datepicker-table-tr {
+  
+}
+.datepicker table tr td {
+  border: dashed 1px black;
+  margin: 1px;
 }
