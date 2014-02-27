@@ -10,9 +10,9 @@
 
 dp.createMainTableHeader = function () {
   var tr = '<tr>';
-  tr += '<td>&lt;</td>';
-  tr += '<td colspan="' + (dp.o.weekLength - 2) + '">' + dp.o.months[dp.c.month] + ' ' + dp.c.year + '</td>';
-  tr += '<td>&gt;</td>';
+  tr += '<td onclick="' + dp.prevMonth() + '">&lt;</td>';
+  tr += '<td colspan="' + (dp.o.weekLength - 2) + '">' + dp.o.months[dp.c.month - 1] + ' ' + dp.c.year + '</td>';
+  tr += '<td onclick="' + dp.nextMonth() + '">&gt;</td>';
   tr += '</tr>';
   return tr;
 };

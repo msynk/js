@@ -3,7 +3,7 @@
   div.id = 'dp';
   div.className = 'datepicker';
   div.style.display = 'none';
-  if (dp.culture.rtl) {
+  if (dp.calendar.rtl) {
     div.style.direction = 'rtl';
   }
 

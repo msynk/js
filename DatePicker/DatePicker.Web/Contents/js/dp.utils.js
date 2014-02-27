@@ -28,5 +28,5 @@
       object[property] = config[property];
     }
     return object;
-  }
+  },
 };
