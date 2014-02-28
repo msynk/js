@@ -1,4 +1,4 @@
-﻿dp.u = {
+﻿jdp.u = {
   override: function (object, config) {
     if (arguments.length === 1) {
       config = object;

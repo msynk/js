@@ -1,17 +1,35 @@
-﻿.datepicker {
+﻿.jdp {
   position: absolute;
   border: solid 2px blue;
 }
 
-.datepicker-table {
+  .jdp table tr td {
+    border: dashed 1px black;
+    margin: 1px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+.jdp-rtl {
+  direction: rtl;
 }
 
-.datepicker-table-tr {
+.jdp-daysPanel {
 }
 
-.datepicker table tr td {
-  border: dashed 1px black;
-  margin: 1px;
-  cursor: pointer;
-  text-align: center;
+  .jdp-daysPanel table {
+  }
+
+    .jdp-daysPanel table tr {
+    }
+
+      .jdp-daysPanel table tr td {
+      }
+
+.jdp-today {
+  background-color: aqua;
+}
+
+.jdp-selected {
+  background-color: pink;
 }
