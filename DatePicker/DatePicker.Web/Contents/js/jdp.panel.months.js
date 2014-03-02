@@ -27,18 +27,18 @@ jdp.monthsPanel.createHeader = function (dp) {
   tdPrev.innerHTML = '&lt;';
   tdPrev.onclick = function () {
     dp.prevYear();
-  }
+  };
 
   tdCenter.innerHTML = dp.viewDate.year;
   tdCenter.colSpan = dp.calendar.monthsInRow - 2;
   tdCenter.onclick = function () {
     dp.showYears();
-  }
+  };
 
   tdNext.innerHTML = '&gt;';
   tdNext.onclick = function () {
     dp.nextYear();
-  }
+  };
 
   tr.appendChild(tdPrev);
   tr.appendChild(tdCenter);

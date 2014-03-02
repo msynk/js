@@ -6,7 +6,7 @@
 };
 
 jdp.DatePicker = function (t, opt) {
-  me = this;
+  var me = this;
   if (!(me instanceof jdp.DatePicker)) {
     throw 'its a constructor not a function.';
   }
@@ -34,15 +34,15 @@ jdp.DatePicker = function (t, opt) {
 
     document.onmousedown = function (e) {
       e = e || window.event;
-      var t = e.target;
+      var target = e.target;
       var isValidTarget = function (tar) {
         return tar == me.panels.days || tar == me.panels.months || tar == me.panels.years || tar == me.panels.decades;
       };
-      if (t == me.target || isValidTarget(t)) return;
+      if (target == me.target || isValidTarget(target)) return;
 
-      while (t.parentNode) {
-        if (isValidTarget(t.parentNode)) return;
-        t = t.parentNode;
+      while (target.parentNode) {
+        if (isValidTarget(target.parentNode)) return;
+        target = target.parentNode;
       }
       me.hide();
     };
@@ -99,7 +99,7 @@ jdp.DatePicker.prototype.selectYear = function (year) {
   this.renderMonthsPanel();
 };
 jdp.DatePicker.prototype.selectDecade = function (decade) {
-  this.viewDate.setYear(year);
+  this.viewDate.setYear(decade);
   this.panels.decades.style.display = 'none';
   this.renderYearsPanel();
 };
@@ -181,4 +181,17 @@ jdp.DatePicker.prototype.renderDecadesPanel = function () {
   this.panels.decades.style.top = this.top;
   this.panels.decades.style.left = this.left;
   document.body.appendChild(this.panels.decades);
+};
+jdp.DatePicker.prototype.prevCentury = function () {
+  this.viewDate.addYear(-100);
+  this.renderDecadesPanel();
+};
+jdp.DatePicker.prototype.nextCentury = function () {
+  this.viewDate.addYear(100);
+  this.renderDecadesPanel();
+};
+jdp.DatePicker.prototype.showCenturies = function () {
+  //this.hide();
+  //this.renderDecadesPanel();
+  //this.panels.decades.style.display = 'block';
 };
