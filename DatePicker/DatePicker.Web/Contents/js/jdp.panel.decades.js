@@ -27,18 +27,22 @@ jdp.decadesPanel.createHeader = function (dp, startDecade) {
 
   tdPrev.innerHTML = '&lt;';
   tdPrev.onclick = function () {
-    dp.prevCentury();
+    dp.viewDate.addYear(-100);
+    dp.renderDecadesPanel();
   };
 
   tdCenter.innerHTML = startDecade + ' - ' + (startDecade + 99);
   tdCenter.style.direction = 'ltr';
   tdCenter.onclick = function () {
-    //dp.showDecades();
+    //dp.hide();
+    //dp.renderDecadesPanel();
+    //dp.panels.decades.style.display = 'block';
   };
 
   tdNext.innerHTML = '&gt;';
   tdNext.onclick = function () {
-    dp.nextCentury();
+    dp.viewDate.addYear(100);
+    dp.renderDecadesPanel();
   };
 
   tr.appendChild(tdPrev);
@@ -55,7 +59,9 @@ jdp.decadesPanel.createDecades = function (dp, table, startDecade) {
       td.innerHTML = decade + ' - ' + (decade + 9);
       td.decade = decade;
       td.onclick = function () {
-        dp.selectDecade(this.decade);
+        dp.viewDate.setYear(this.decade);
+        dp.panels.decades.style.display = 'none';
+        dp.renderYearsPanel();
       };
       tr.appendChild(td);
       decade += 10;

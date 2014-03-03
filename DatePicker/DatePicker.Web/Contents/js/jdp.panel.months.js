@@ -26,18 +26,22 @@ jdp.monthsPanel.createHeader = function (dp) {
 
   tdPrev.innerHTML = '&lt;';
   tdPrev.onclick = function () {
-    dp.prevYear();
+    dp.viewDate.addYear(-1);
+    dp.renderMonthsPanel();
   };
 
   tdCenter.innerHTML = dp.viewDate.year;
   tdCenter.colSpan = dp.calendar.monthsInRow - 2;
   tdCenter.onclick = function () {
-    dp.showYears();
+    dp.hide();
+    dp.renderYearsPanel();
+    dp.panels.years.style.display = 'block';
   };
 
   tdNext.innerHTML = '&gt;';
   tdNext.onclick = function () {
-    dp.nextYear();
+    dp.viewDate.addYear(1);
+    dp.renderMonthsPanel();
   };
 
   tr.appendChild(tdPrev);
@@ -55,7 +59,9 @@ jdp.monthsPanel.createMonths = function (dp, table) {
       td.innerHTML = dp.calendar.months[index];
       td.month = index + 1;
       td.onclick = function () {
-        dp.selectMonth(this.month);
+        dp.viewDate.setMonth(this.month);
+        dp.panels.months.style.display = 'none';
+        dp.renderDaysPanel();
       };
       tr.appendChild(td);
       index++;

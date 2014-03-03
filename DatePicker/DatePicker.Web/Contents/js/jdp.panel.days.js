@@ -27,18 +27,22 @@ jdp.daysPanel.createHeader = function (dp) {
 
   tdPrev.innerHTML = '&lt;';
   tdPrev.onclick = function () {
-    dp.prevMonth();
+    dp.viewDate.addMonth(-1);
+    dp.renderDaysPanel();
   }
 
   tdCenter.innerHTML = dp.calendar.months[dp.viewDate.month - 1] + ' ' + dp.viewDate.year;
   tdCenter.colSpan = (dp.calendar.weekLength - 2);
   tdCenter.onclick = function () {
-    dp.showMonths();
+    dp.hide();
+    dp.renderMonthsPanel();
+    dp.panels.months.style.display = 'block';
   }
 
   tdNext.innerHTML = '&gt;';
   tdNext.onclick = function () {
-    dp.nextMonth();
+    dp.viewDate.addMonth(1);
+    dp.renderDaysPanel();
   }
 
   tr.appendChild(tdPrev);
@@ -68,7 +72,9 @@ jdp.daysPanel.createDays = function (dp, table) {
       if (day !== '') {
         td.day = day;
         td.onclick = function () {
-          dp.selectDate(this.day);
+          var date = dp.viewDate.get(this.day);
+          dp.selectedDate = date;
+          dp.target.value = dp.selectedDate.toString();
         };
         td.innerHTML = day;
 
